@@ -9,3 +9,6 @@ configure
 install-sh
 missing
 *~
+font-cronyx-cyrillic-*.tar.*
+ChangeLog
+tags
