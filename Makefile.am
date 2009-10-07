@@ -86,13 +86,13 @@ FONT_FILES = \
 	koinil2
 
 BDF_FILES = $(FONT_FILES:%=%.bdf)
-PCF_FILES = $(FONT_FILES:%=%.pcf.gz)
+PCF_FILES = $(FONT_FILES:%=%.pcf$(COMPRESS_SUFFIX))
 
-SUFFIXES = .bdf .pcf.gz
+SUFFIXES = .bdf .pcf$(COMPRESS_SUFFIX)
 
-.bdf.pcf.gz:
+.bdf.pcf$(COMPRESS_SUFFIX):
 	@rm -f $@
-	$(BDFTOPCF) -t $< | gzip > $@
+	$(AM_V_GEN)$(BDFTOPCF) -t $< | $(COMPRESS) > $@
 
 fontdir = @FONTDIR@
 font_DATA = $(PCF_FILES)
@@ -101,10 +101,9 @@ CLEANFILES = $(font_DATA)
 EXTRA_DIST = $(BDF_FILES) COPYRIGHT
 
 install-data-hook:
-	@rm -f $(DESTDIR)$(fontdir)/fonts.scale
-	$(MKFONTSCALE) $(DESTDIR)$(fontdir)
 	@rm -f $(DESTDIR)$(fontdir)/font.dir
 	$(MKFONTDIR) $(DESTDIR)$(fontdir)
+	@RUN_FCCACHE@
 
 distuninstallcheck:
 	@:
